@@ -40,6 +40,7 @@ permissions:
   statuses: read
   repository-projects: read
   artifact-metadata: read
+  vulnerability-alerts: read
 
 jobs:
   find-targets:
