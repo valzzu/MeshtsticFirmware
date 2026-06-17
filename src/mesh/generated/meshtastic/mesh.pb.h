@@ -325,6 +325,14 @@ typedef enum _meshtastic_HardwareModel {
     meshtastic_HardwareModel_T_IMPULSE_PLUS = 135,
     /* Lilygo T-Echo Card */
     meshtastic_HardwareModel_T_ECHO_CARD = 136,
+    /* Seeed Tracker L2 */
+    meshtastic_HardwareModel_SEEED_WIO_TRACKER_L2 = 137,
+    /* Elecrow CrowPanel Advance P4 models, ESP32-P4 and TFT with SX1262 radio plugin */
+    meshtastic_HardwareModel_CROWPANEL_P4 = 138,
+    /* Heltec Mesh Tower V2 */
+    meshtastic_HardwareModel_HELTEC_MESH_TOWER_V2 = 139,
+    /* Meshnology W10 */
+    meshtastic_HardwareModel_MESHNOLOGY_W10 = 140,
     /* ------------------------------------------------------------------------------------------------------------------------------------------
  Reserved ID For developing private Ports. These will show up in live traffic sparsely, so we can use a high number. Keep it within 8 bits.
  ------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -774,7 +782,10 @@ typedef struct _meshtastic_User {
  Note: app developers are encouraged to also use the following standard
  node IDs "^all" (for broadcast), "^local" (for the locally connected node) */
     char id[16];
-    /* A full name for this user, i.e. "Kevin Hester" */
+    /* A full name for this user, i.e. "Kevin Hester"
+ Limited to 24 bytes of UTF-8: longer names are accepted from senders
+ built against the older 39-byte limit, but devices truncate them before
+ storing or rebroadcasting. Clients should enforce 24 bytes in their UI. */
     char long_name[40];
     /* A VERY short name, ideally two characters.
  Suitable for a tiny OLED screen */
