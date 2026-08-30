@@ -1,5 +1,6 @@
 #include "ReliableRouter.h"
 #include "Default.h"
+#include "MeshService.h"
 #include "MeshTypes.h"
 #include "NodeDB.h"
 #include "configuration.h"
@@ -60,6 +61,13 @@ void ReliableRouter::perhapsGenerateImplicitAckForOwnOverheard(const meshtastic_
         return;
 
     printPacket("Rx someone rebroadcasting for us", p);
+
+    // Notify the application so it can observe the signal quality of the rebroadcast path.
+    // rx_snr, rx_rssi, relay_node, hop_start/limit are all populated by the radio layer.
+    // packet.from == myNodeId is the app-side discriminator for this event type.
+    if (p->transport_mechanism == meshtastic_MeshPacket_TransportMechanism_TRANSPORT_LORA) {
+        service->sendToPhone(packetPool.allocCopy(*p));
+    }
 
     // We are seeing someone rebroadcast one of our transmissions. If this is the first time we saw
     // this, cancel any retransmissions we have queued up and generate an internal ack for the
