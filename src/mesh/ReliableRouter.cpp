@@ -3,6 +3,7 @@
 #include "MeshService.h"
 #include "MeshTypes.h"
 #include "NodeDB.h"
+#include "UptimeClock.h"
 #include "configuration.h"
 #include "memGet.h"
 #include "mesh-pb-constants.h"
@@ -188,7 +189,7 @@ void ReliableRouter::sniffReceived(const meshtastic_MeshPacket *p, const meshtas
                 // M3: an end-to-end ACK proves the directed route to the ACK's sender currently works,
                 // so clear its failure count and refresh freshness (keeps a good route pinned).
                 if (!isBroadcast(getFrom(p)))
-                    noteRouteSuccess(getFrom(p), millis());
+                    noteRouteSuccess(getFrom(p), Time::stampMillis());
             } else {
                 stopRetransmission(p->to, nakId);
             }
