@@ -680,6 +680,25 @@ void VirtualKeyboard::handleLongPress()
     }
 }
 
+bool VirtualKeyboard::handleInputEvent(const InputEvent &event)
+{
+    if (event.inputEvent != INPUT_BROKER_ANYKEY || event.codepoint == 0)
+        return false;
+
+    resetTimeout();
+    if (event.codepoint <= 0x7F) {
+        insertCharacter((char)event.codepoint);
+    } else if (event.codepoint <= 0x7FF) {
+        inputText += (char)(0xC0 | (event.codepoint >> 6));
+        inputText += (char)(0x80 | (event.codepoint & 0x3F));
+    } else {
+        inputText += (char)(0xE0 | (event.codepoint >> 12));
+        inputText += (char)(0x80 | ((event.codepoint >> 6) & 0x3F));
+        inputText += (char)(0x80 | (event.codepoint & 0x3F));
+    }
+    return true;
+}
+
 void VirtualKeyboard::insertCharacter(char c)
 {
     if (inputText.length() < 160) { // Reasonable text length limit
@@ -691,6 +710,8 @@ void VirtualKeyboard::deleteCharacter()
 {
     if (!inputText.empty()) {
         inputText.pop_back();
+        while (!inputText.empty() && ((uint8_t)inputText.back() & 0xC0) == 0x80)
+            inputText.pop_back();
     }
 }
 

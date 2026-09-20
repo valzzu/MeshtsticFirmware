@@ -1196,7 +1196,9 @@ void NotificationRenderer::drawTextInput(OLEDDisplay *display, OLEDDisplayUiStat
         }
 
         if (inEvent.inputEvent != INPUT_BROKER_NONE) {
-            bool handled = OnScreenKeyboardModule::processVirtualKeyboardInput(inEvent, virtualKeyboard);
+            bool handled = virtualKeyboard->handleInputEvent(inEvent);
+            if (!handled)
+                handled = OnScreenKeyboardModule::processVirtualKeyboardInput(inEvent, virtualKeyboard);
             if (!handled && inEvent.inputEvent == INPUT_BROKER_CANCEL) {
                 auto callback = textInputCallback;
                 OnScreenKeyboardModule::instance().stop(false); // sole owner of the keyboard; also clears our aliases

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "configuration.h"
+#include "input/InputBroker.h"
 #include <OLEDDisplay.h>
 #include <functional>
 #include <string>
@@ -37,6 +38,7 @@ class VirtualKeyboard
     void moveCursorRight();
     void handlePress();
     void handleLongPress();
+    bool handleInputEvent(const InputEvent &event);
 
     // Timeout management
     void resetTimeout();

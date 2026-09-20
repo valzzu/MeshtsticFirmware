@@ -54,6 +54,7 @@ typedef struct _InputEvent {
     const char *source;
     input_broker_event inputEvent;
     unsigned char kbchar;
+  uint32_t codepoint;
     uint16_t touchX;
     uint16_t touchY;
 } InputEvent;
